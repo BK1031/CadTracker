@@ -15,4 +15,9 @@ func ConnectDiscord() {
 		return
 	}
 	Discord = dg
+	_, err = Discord.ChannelMessageSend("767474044349710397", ":white_check_mark: CadTracker Server v"+config.Version+" online! `[ENV = "+config.Env+"]`")
+	if err != nil {
+		fmt.Println("Error sending Discord message, ", err)
+		return
+	}
 }

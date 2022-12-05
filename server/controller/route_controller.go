@@ -2,9 +2,13 @@ package controller
 
 import (
 	"context"
+	"flag"
+	"github.com/Necroforger/dgrouter/exrouter"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"server/config"
 	"server/service"
 	"strings"
 )
@@ -14,6 +18,30 @@ func InitializeRoutes(router *gin.Engine) {
 	router.GET("/users", GetAllUsers)
 	router.GET("/users/:userID", GetUserByID)
 	router.POST("/users/:userID", CreateUser)
+}
+
+func InitializeDiscordBot(dgrouter *exrouter.Route) {
+	dgrouter.On("ping", func(ctx *exrouter.Context) {
+		ctx.Reply("pong")
+	}).Desc("status check")
+	dgrouter.On("avatar", func(ctx *exrouter.Context) {
+		ctx.Reply(ctx.Msg.Author.AvatarURL("2048"))
+	}).Desc("returns the user's avatar")
+
+	dgrouter.Default = dgrouter.On("help", func(ctx *exrouter.Context) {
+		var text = ""
+		for _, v := range dgrouter.Routes {
+			text += v.Name + " : \t" + v.Description + "\n"
+		}
+		ctx.Reply("```" + text + "```")
+	}).Desc("prints this help menu")
+	service.Discord.AddHandler(func(_ *discordgo.Session, m *discordgo.MessageCreate) {
+		dgrouter.FindAndExecute(service.Discord, *flag.String("p", config.DiscordPrefix, "bot prefix"), service.Discord.State.User.ID, m.Message)
+	})
+	err := service.Discord.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func RequestLogger() gin.HandlerFunc {
