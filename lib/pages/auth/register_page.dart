@@ -39,8 +39,9 @@ class _RegisterPageState extends State<RegisterPage> {
         await fb.FirebaseAuth.instance.createUserWithEmailAndPassword(email: registerUser.email, password: password).then((value) async {
           if (value.user?.uid != null) {
             registerUser.id = value.user!.uid;
+            registerUser.privacy.userID = value.user!.uid;
             await AuthService.getAuthToken();
-            await http.post(Uri.parse("$API_HOST/users/${registerUser.id}"), headers: {"TRACKER-API-KEY": TRACKER_API_KEY, "Authorization": "Bearer $TRACKER_AUTH_TOKEN"}, body: jsonEncode(registerUser));
+            await http.post(Uri.parse("$API_HOST/users/${registerUser.id}"), headers: {"Authorization": "Bearer $TRACKER_AUTH_TOKEN"}, body: jsonEncode(registerUser));
             await AuthService.getUser(value.user!.uid);
             router.navigateTo(context, "/", replace: true, transition: TransitionType.fadeIn);
           }
@@ -61,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           title: "Error",
           text: error.toString(),
         );
+        fb.FirebaseAuth.instance.currentUser?.delete();
       }
     }
   }
@@ -220,7 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: CupertinoButton(
                     color: MAIN_COLOR,
                     onPressed: () {
-
+                      register();
                     },
                     child: const Text("REGISTER", style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: "Product Sans", fontWeight: FontWeight.bold)),
                   ),

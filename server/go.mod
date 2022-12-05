@@ -11,6 +11,7 @@ require (
 	firebase.google.com/go/v4 v4.10.0 // indirect
 	github.com/MicahParks/keyfunc v1.5.1 // indirect
 	github.com/bwmarrin/discordgo v0.26.1 // indirect
+	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect

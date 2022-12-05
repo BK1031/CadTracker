@@ -10,9 +10,9 @@ class UserPrivacy {
 
   UserPrivacy.fromJson(Map<String, dynamic> json) {
     userID = json["user_id"] ?? "";
-    status = json["stats_basic"] ?? "";
-    status = json["stats_detailed"] ?? "";
     status = json["status"] ?? "";
+    statsBasic = json["stats_basic"] ?? "";
+    statsDetailed = json["stats_detailed"] ?? "";
     updatedAt = DateTime.tryParse(json["updated_at"]) ?? DateTime.now().toUtc();
     createdAt = DateTime.tryParse(json["created_at"]) ?? DateTime.now().toUtc();
   }

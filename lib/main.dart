@@ -18,15 +18,15 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   TRACKER_API_KEY = dotenv.env["TRACKER_API_KEY"]!;
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (!prefs.containsKey("userID")) prefs.setString("userID", "");
-  currentUser.id = prefs.getString("userID")!;
-  if (currentUser.id != "") await AuthService.getUser(currentUser.id);
-
   print("BK CadTracker v${appVersion.toString()}");
   FirebaseApp app = await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("Initialized default app $app");
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (!prefs.containsKey("userID")) prefs.setString("userID", "");
+  currentUser.id = prefs.getString("userID")!;
+  if (currentUser.id != "") await AuthService.getUser(currentUser.id);
 
   // ROUTE DEFINITIONS
   router.define("/", handler: Handler(handlerFunc: (BuildContext? context, Map<String, dynamic>? params) {

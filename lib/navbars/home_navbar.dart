@@ -1,3 +1,4 @@
+import 'package:cad_tracker/utils/auth_service.dart';
 import 'package:cad_tracker/utils/config.dart';
 import 'package:cad_tracker/utils/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,7 +56,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                     padding: EdgeInsets.zero,
                     color: Colors.red,
                     onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
+                      await AuthService.signOut();
                       router.navigateTo(context, "/", replace: true, transition: TransitionType.fadeIn);
                     },
                     child: const Text("SIGN OUT", style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: "Product Sans", fontWeight: FontWeight.bold)),
