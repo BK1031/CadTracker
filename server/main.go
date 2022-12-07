@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/Necroforger/dgrouter/exrouter"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"server/config"
@@ -11,7 +10,6 @@ import (
 )
 
 var router *gin.Engine
-var dgrouter *exrouter.Route
 
 func setupRouter() *gin.Engine {
 	if config.Env == "PROD" {
@@ -32,11 +30,10 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	router = setupRouter()
-	dgrouter = exrouter.New()
 	service.InitializeDB()
 	service.InitializeFirebase()
 	service.ConnectDiscord()
+	controller.InitializeDiscordBot()
 	controller.InitializeRoutes(router)
-	controller.InitializeDiscordBot(dgrouter)
 	router.Run(":" + config.Port)
 }
