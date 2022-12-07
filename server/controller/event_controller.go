@@ -45,5 +45,6 @@ func DiscordStartEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "You do not have a connected CadTracker account! Please create one at https://cad.bk1031.dev, or link your Discord account to your CadTracker account using the `"+config.DiscordPrefix+"link` command.")
 		return
 	}
+
 	s.ChannelMessageSend(m.ChannelID, "Starting event...")
 }
