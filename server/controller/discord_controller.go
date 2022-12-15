@@ -25,6 +25,12 @@ func OnDiscordMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID || !strings.HasPrefix(m.Content, config.DiscordPrefix) {
 		return
 	}
+	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "ping") {
+		DiscordPing(s, m)
+	}
+	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "invite") {
+		DiscordInvite(s, m)
+	}
 	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "link") {
 		DiscordLinkAccount(s, m)
 	}
