@@ -8,6 +8,7 @@ import (
 	"server/model"
 	"server/service"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -71,7 +72,7 @@ func DiscordStartEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	s.MessageReactionAdd(m.ChannelID, m.ID, "👍")
 	//s.ChannelMessageSend(m.ChannelID, "Starting event...")
-	// TODO: Add event to subscription queue
+	service.QueueSubscriptionEventForUser(user, event, true)
 	return
 }
 
@@ -126,10 +127,10 @@ func DiscordStopEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	})
 	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 		Name:  "Elapsed",
-		Value: duration.String(),
+		Value: strings.Replace(duration.String(), "m", "m ", 1),
 	})
 	embed.Title = "Summary"
 	_, _ = service.Discord.ChannelMessageSendEmbed(m.ChannelID, &embed)
-	// TODO: Add event to subscription queue
+	service.QueueSubscriptionEventForUser(user, lastEvent, false)
 	return
 }
