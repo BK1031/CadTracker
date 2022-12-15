@@ -47,3 +47,10 @@ func CreateSubscription(subscription model.Subscription) error {
 	}
 	return nil
 }
+
+func DeleteSubscription(subscriptionID string) error {
+	if result := DB.Where("id = ?", subscriptionID).Delete(model.Subscription{}); result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

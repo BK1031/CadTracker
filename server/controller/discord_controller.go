@@ -34,4 +34,10 @@ func OnDiscordMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "stop") {
 		DiscordStopEvent(s, m)
 	}
+	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "sub") {
+		DiscordCreateSubscription(s, m)
+	}
+	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "unsub") {
+		DiscordRemoveSubscription(s, m)
+	}
 }
