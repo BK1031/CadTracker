@@ -69,7 +69,8 @@ func DiscordStartEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if err != nil {
 		return
 	}
-	s.ChannelMessageSend(m.ChannelID, "Starting event...")
+	s.MessageReactionAdd(m.ChannelID, m.ID, "👍")
+	//s.ChannelMessageSend(m.ChannelID, "Starting event...")
 	// TODO: Add event to subscription queue
 	return
 }
@@ -96,16 +97,17 @@ func DiscordStopEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	duration := lastEvent.Stop.Sub(lastEvent.Start)
+	// Find which number this event is for the current day
 	lastEvents := service.GetLastDayEventsForUser(user.ID)
 	count := 0
 	for _, event := range lastEvents {
 		localTime := event.Start.Local()
-		println(localTime.String())
 		if localTime.Day() == time.Now().Day() {
 			count++
 		}
 	}
 	s.ChannelMessageSend(m.ChannelID, "<@"+m.Author.ID+"> just finished ("+strconv.Itoa(count)+" today)")
+	// Create the summary embed
 	var embed = discordgo.MessageEmbed{}
 	embed.URL = "https://cad.bk1031.dev/events/" + lastEvent.ID
 	// Embed description for DDD
