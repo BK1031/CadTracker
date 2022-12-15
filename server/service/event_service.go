@@ -2,6 +2,7 @@ package service
 
 import (
 	"server/model"
+	"time"
 )
 
 func GetAllEvents() []model.Event {
@@ -15,6 +16,30 @@ func GetAllEvents() []model.Event {
 func GetEventByID(eventID string) model.Event {
 	var event model.Event
 	result := DB.Where("id = ?", eventID).Find(&event)
+	if result.Error != nil {
+	}
+	return event
+}
+
+func GetAllEventsForUser(userID string) []model.Event {
+	var events []model.Event
+	result := DB.Where("user_id = ?", userID).Find(&events)
+	if result.Error != nil {
+	}
+	return events
+}
+
+func GetLastDayEventsForUser(userID string) []model.Event {
+	var events []model.Event
+	result := DB.Where("user_id = ?", userID).Where("start > ?", time.Now().AddDate(0, 0, -1)).Find(&events)
+	if result.Error != nil {
+	}
+	return events
+}
+
+func GetLastEventForUser(userID string) model.Event {
+	var event model.Event
+	result := DB.Where("user_id = ?", userID).Last(&event)
 	if result.Error != nil {
 	}
 	return event

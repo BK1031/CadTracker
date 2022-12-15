@@ -22,7 +22,6 @@ func InitializeDiscordBot() {
 func OnDiscordMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself
 	// or messages that don't start with the prefix
-	println("Message received from " + m.Author.Username + ": " + m.Content)
 	if m.Author.ID == s.State.User.ID || !strings.HasPrefix(m.Content, config.DiscordPrefix) {
 		return
 	}
@@ -31,5 +30,8 @@ func OnDiscordMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "start") {
 		DiscordStartEvent(s, m)
+	}
+	if strings.HasPrefix(strings.Split(m.Content, config.DiscordPrefix)[1], "stop") {
+		DiscordStopEvent(s, m)
 	}
 }
