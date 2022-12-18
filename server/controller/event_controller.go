@@ -55,11 +55,12 @@ func DiscordStartEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// Create new event
+	now := time.Now()
 	event := model.Event{
 		ID:         strconv.FormatInt(time.Now().Unix(), 10),
 		UserID:     user.ID,
-		Start:      time.Now(),
-		Stop:       time.Now(),
+		Start:      now,
+		Stop:       now,
 		Notes:      "",
 		Orgasm:     false,
 		Ejaculated: false,
