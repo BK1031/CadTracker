@@ -20,6 +20,7 @@ func InitializeRoutes(router *gin.Engine) {
 	router.GET("/users/:userID/events/recent/day", GetLatestDayEventsForUser)
 	router.POST("/events", CreateEvent)
 	router.GET("/events/:eventID", GetEventByID)
+	router.DELETE("/events/:eventID", DeleteEvent)
 }
 
 func RequestLogger() gin.HandlerFunc {

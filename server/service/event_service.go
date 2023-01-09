@@ -64,3 +64,11 @@ func CreateEvent(event model.Event) error {
 	}
 	return nil
 }
+
+func DeleteEvent(event model.Event) error {
+	result := DB.Where("id = ?", event.ID).Delete(&event)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
