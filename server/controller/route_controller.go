@@ -14,6 +14,11 @@ func InitializeRoutes(router *gin.Engine) {
 	router.GET("/users", GetAllUsers)
 	router.GET("/users/:userID", GetUserByID)
 	router.POST("/users/:userID", CreateUser)
+	router.GET("/users/:userID/events", GetAllEventsForUser)
+	router.GET("/users/:userID/events/latest", GetLatestEventForUser)
+	router.GET("/users/:userID/events/recent/year", GetLatestYearEventsForUser)
+	router.GET("/users/:userID/events/recent/day", GetLatestDayEventsForUser)
+	router.POST("/users/:userID/events/new", GetEventByID)
 }
 
 func RequestLogger() gin.HandlerFunc {

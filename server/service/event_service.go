@@ -29,6 +29,14 @@ func GetAllEventsForUser(userID string) []model.Event {
 	return events
 }
 
+func GetLastYearEventsForUser(userID string) []model.Event {
+	var events []model.Event
+	result := DB.Where("user_id = ?", userID).Where("start > ?", time.Now().AddDate(-1, 0, 0)).Find(&events)
+	if result.Error != nil {
+	}
+	return events
+}
+
 func GetLastDayEventsForUser(userID string) []model.Event {
 	var events []model.Event
 	result := DB.Where("user_id = ?", userID).Where("start > ?", time.Now().AddDate(0, 0, -1)).Find(&events)

@@ -26,6 +26,30 @@ func GetEventByID(c *gin.Context) {
 	}
 }
 
+func GetAllEventsForUser(c *gin.Context) {
+	result := service.GetAllEventsForUser(c.Param("userID"))
+	c.JSON(http.StatusOK, result)
+}
+
+func GetLatestYearEventsForUser(c *gin.Context) {
+	result := service.GetLastYearEventsForUser(c.Param("userID"))
+	c.JSON(http.StatusOK, result)
+}
+
+func GetLatestDayEventsForUser(c *gin.Context) {
+	result := service.GetLastDayEventsForUser(c.Param("userID"))
+	c.JSON(http.StatusOK, result)
+}
+
+func GetLatestEventForUser(c *gin.Context) {
+	result := service.GetLastEventForUser(c.Param("userID"))
+	if result.ID == "" {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No events found for user with given id: " + c.Param("userID")})
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
+}
+
 func CreateEvent(c *gin.Context) {
 	var input model.Event
 	if err := c.ShouldBindJSON(&input); err != nil {
