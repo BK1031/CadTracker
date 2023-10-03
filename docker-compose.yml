@@ -12,6 +12,15 @@ services:
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
 
+  cadtracker-web:
+    container_name: cadtracker-web
+    depends_on:
+      - cadtracker-server
+    build: .
+    image: bk1031/cadtracker-web
+    ports:
+      - "9982:80"
+
   cadtracker-server:
     container_name: cadtracker-server
     depends_on:
@@ -19,7 +28,7 @@ services:
     build: ./server
     image: bk1031/cadtracker-server
     ports:
-      - "${PORT}:${PORT}"
+      - "9981:9981"
     environment:
       ENV: $ENV
       PORT: $PORT
