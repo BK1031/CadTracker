@@ -23,7 +23,7 @@ func setupRouter() *gin.Engine {
 		MaxAge:           12 * time.Hour,
 		AllowCredentials: true,
 	}))
-	r.Use(controller.RequestLogger())
+	r.Use(controller.HoodLogger())
 	r.Use(controller.AuthChecker())
 	return r
 }
@@ -34,6 +34,6 @@ func main() {
 	service.InitializeFirebase()
 	service.ConnectDiscord()
 	controller.InitializeDiscordBot()
-	controller.InitializeRoutes(router)
+	controller.InitializeHoods(router)
 	router.Run(":" + config.Port)
 }

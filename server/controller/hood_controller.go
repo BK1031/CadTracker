@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func InitializeRoutes(router *gin.Engine) {
+func InitializeHoods(router *gin.Engine) {
 	router.GET("/ping", Ping)
 	router.GET("/users", GetAllUsers)
 	router.GET("/users/:userID", GetUserByID)
@@ -26,7 +26,7 @@ func InitializeRoutes(router *gin.Engine) {
 	router.DELETE("/events/:eventID", DeleteEvent)
 }
 
-func RequestLogger() gin.HandlerFunc {
+func HoodLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 	}
