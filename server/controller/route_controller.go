@@ -18,7 +18,10 @@ func InitializeRoutes(router *gin.Engine) {
 	router.GET("/users/:userID/events/latest", GetLatestEventForUser)
 	router.GET("/users/:userID/events/recent/year", GetLatestYearEventsForUser)
 	router.GET("/users/:userID/events/recent/day", GetLatestDayEventsForUser)
-	router.POST("/events", CreateEvent)
+	router.POST("/users/:userID/events/start", StartEvent)
+	router.POST("/users/:userID/events/stop", StopEvent)
+	router.GET("/users/:userID/events/current", GetCurrentEventForUser)
+	router.POST("/users/:userID/events/:eventID", EditEventForUser)
 	router.GET("/events/:eventID", GetEventByID)
 	router.DELETE("/events/:eventID", DeleteEvent)
 }

@@ -50,26 +50,86 @@ func GetLatestEventForUser(c *gin.Context) {
 	}
 }
 
-func CreateEvent(c *gin.Context) {
-	var input model.Event
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func GetCurrentEventForUser(c *gin.Context) {
+	result := service.GetLastEventForUser(c.Param("userID"))
+	if result.ID == "" {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No events found for user with given id: " + c.Param("userID")})
+	} else if result.Start != result.Stop {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No ongoing event found for user with given id: " + c.Param("userID")})
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
+}
+
+func StartEvent(c *gin.Context) {
+	// Check if user already has an event running
+	lastEvent := service.GetLastEventForUser(c.Param("userID"))
+	if lastEvent.ID != "" && lastEvent.Start == lastEvent.Stop {
+		c.JSON(http.StatusConflict, gin.H{"message": "User already has an event running"})
 		return
 	}
-	if err := service.CreateEvent(input); err != nil {
+	// Create new event
+	now := time.Now()
+	event := model.Event{
+		ID:         strconv.FormatInt(time.Now().Unix(), 10),
+		UserID:     c.Param("userID"),
+		Start:      now,
+		Stop:       now,
+		Notes:      "",
+		Orgasm:     false,
+		Ejaculated: false,
+		UpdatedAt:  time.Time{},
+		CreatedAt:  time.Time{},
+	}
+	err := service.CreateEvent(event)
+	if err != nil {
+		return
+	}
+	user := service.GetUserByID(c.Param("userID"))
+	go service.QueueSubscriptionEventForUser(user, event, true)
+	c.JSON(http.StatusOK, service.GetLastEventForUser(c.Param("userID")))
+	return
+}
+
+func StopEvent(c *gin.Context) {
+	// Check if user already has an event running
+	lastEvent := service.GetLastEventForUser(c.Param("userID"))
+	if lastEvent.ID == "" || lastEvent.Start != lastEvent.Stop {
+		c.JSON(http.StatusConflict, gin.H{"message": "User does not have an event running"})
+		return
+	}
+	// Create new event
+	lastEvent.Stop = time.Now()
+	lastEvent.Orgasm = true
+	lastEvent.Ejaculated = true
+	err := service.CreateEvent(lastEvent)
+	if err != nil {
+		return
+	}
+	user := service.GetUserByID(c.Param("userID"))
+	go service.QueueSubscriptionEventForUser(user, lastEvent, false)
+	c.JSON(http.StatusOK, service.GetLastEventForUser(c.Param("userID")))
+	return
+}
+
+func EditEventForUser(c *gin.Context) {
+	var event model.Event
+	if err := c.ShouldBindJSON(&event); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid event data"})
+		return
+	}
+	event.ID = c.Param("eventID")
+	event.UserID = c.Param("userID")
+	if err := service.CreateEvent(event); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, service.GetEventByID(input.ID))
+	c.JSON(http.StatusOK, event)
+	return
 }
 
 func DeleteEvent(c *gin.Context) {
-	var input model.Event
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := service.DeleteEvent(input); err != nil {
+	if err := service.DeleteEvent(c.Param("eventID")); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}

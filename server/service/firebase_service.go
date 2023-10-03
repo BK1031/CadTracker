@@ -18,8 +18,7 @@ func InitializeFirebase() {
 	}
 	ctx := context.Background()
 	conf := &firebase.Config{
-		DatabaseURL: "https://cad-tracker-1031.firebaseio.com",
-		ProjectID:   "cad-tracker-1031",
+		ProjectID: config.FirebaseProjectID,
 	}
 	opt := option.WithCredentialsJSON(decoded)
 	app, err := firebase.NewApp(ctx, conf, opt)

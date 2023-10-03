@@ -65,8 +65,8 @@ func CreateEvent(event model.Event) error {
 	return nil
 }
 
-func DeleteEvent(event model.Event) error {
-	result := DB.Where("id = ?", event.ID).Delete(&event)
+func DeleteEvent(eventID string) error {
+	result := DB.Where("id = ?", eventID).Delete(&model.Event{})
 	if result.Error != nil {
 		return result.Error
 	}

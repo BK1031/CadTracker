@@ -14,4 +14,5 @@ var PostgresPort = os.Getenv("POSTGRES_PORT")
 var DiscordPrefix = os.Getenv("DISCORD_PREFIX")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
 
+var FirebaseProjectID = os.Getenv("FIREBASE_PROJECT_ID")
 var FirebaseServiceAccountEncoded = os.Getenv("FIREBASE_SERVICE_ACCOUNT")
