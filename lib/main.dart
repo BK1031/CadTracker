@@ -16,7 +16,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
-  TRACKER_API_KEY = dotenv.env["TRACKER_API_KEY"]!;
 
   print("BK CadTracker v${appVersion.toString()}");
   FirebaseApp app = await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cad_tracker/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:cad_tracker/models/user.dart';
 import 'package:cad_tracker/utils/auth_service.dart';
@@ -43,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
             await AuthService.getAuthToken();
             await http.post(Uri.parse("$API_HOST/users/${registerUser.id}"), headers: {"Authorization": "Bearer $TRACKER_AUTH_TOKEN"}, body: jsonEncode(registerUser));
             await AuthService.getUser(value.user!.uid);
-            router.navigateTo(context, "/", replace: true, transition: TransitionType.fadeIn);
+            Future.delayed(Duration.zero, () => router.navigateTo(context, "/", transition: TransitionType.fadeIn, replace: true, clearStack: true));
           }
           else {
             CoolAlert.show(
@@ -55,13 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
           }
         });
       } catch (error) {
-        print(error);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.error,
-          title: "Error",
-          text: error.toString(),
-        );
+        log(error, LogLevel.error);
         fb.FirebaseAuth.instance.currentUser?.delete();
       }
     }
@@ -82,49 +77,43 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text("Register", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: MAIN_COLOR), textAlign: TextAlign.center,),
                 const Padding(padding: EdgeInsets.all(12.0),),
                 const Text("Create to your CadTracker account below!", textAlign: TextAlign.center, style: TextStyle(fontSize: 16),),
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          decoration: const InputDecoration(
-                              icon: Icon(Icons.person),
-                              labelText: "First Name",
-                              hintText: "Enter your first name"
-                          ),
-                          autocorrect: false,
-                          keyboardType: TextInputType.emailAddress,
-                          textCapitalization: TextCapitalization.none,
-                          onChanged: (value) {
-                            setState(() {
-                              registerUser.firstName = value;
-                            });
-                          },
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                            icon: Icon(Icons.person),
+                            labelText: "First Name",
+                            hintText: "Enter your first name"
                         ),
+                        autocorrect: false,
+                        keyboardType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
+                        onChanged: (value) {
+                          setState(() {
+                            registerUser.firstName = value;
+                          });
+                        },
                       ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          decoration: const InputDecoration(
-                              icon: Icon(Icons.person),
-                              labelText: "Last Name",
-                              hintText: "Enter your last name"
-                          ),
-                          autocorrect: false,
-                          keyboardType: TextInputType.emailAddress,
-                          textCapitalization: TextCapitalization.none,
-                          onChanged: (value) {
-                            setState(() {
-                              registerUser.lastName = value;
-                            });
-                          },
+                    ),
+                    const Padding(padding: EdgeInsets.all(16)),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                            labelText: "Last Name",
+                            hintText: "Enter your last name"
                         ),
+                        autocorrect: false,
+                        keyboardType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
+                        onChanged: (value) {
+                          setState(() {
+                            registerUser.lastName = value;
+                          });
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 TextField(
                   decoration: const InputDecoration(

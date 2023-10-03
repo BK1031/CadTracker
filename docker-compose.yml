@@ -6,11 +6,31 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "9980:${POSTGRES_PORT}"
     environment:
-      POSTGRES_DB: cad_tracker
+      POSTGRES_DB: "cad_tracker"
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+  cadtracker-server:
+    container_name: cadtracker-server
+    depends_on:
+      - db
+    build: ./server
+    image: bk1031/cadtracker-server
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      ENV: $ENV
+      PORT: $PORT
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_PORT: $POSTGRES_PORT
+      DISCORD_PREFIX: $DISCORD_PREFIX
+      DISCORD_TOKEN: $DISCORD_TOKEN
+      FIREBASE_PROJECT_ID: $FIREBASE_PROJECT_ID
+      FIREBASE_SERVICE_ACCOUNT: $FIREBASE_SERVICE_ACCOUNT
 
 volumes:
   pgdata:

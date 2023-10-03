@@ -1,5 +1,6 @@
 import 'package:cad_tracker/utils/auth_service.dart';
 import 'package:cad_tracker/utils/config.dart';
+import 'package:cad_tracker/utils/logger.dart';
 import 'package:cad_tracker/utils/theme.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) async {
           if (value.user?.uid != null) {
             await AuthService.getUser(value.user!.uid);
-            router.navigateTo(context, "/", replace: true, transition: TransitionType.fadeIn);
+            Future.delayed(Duration.zero, () => router.navigateTo(context, "/", transition: TransitionType.fadeIn, replace: true, clearStack: true));
           }
           else {
             CoolAlert.show(
@@ -39,13 +40,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         });
       } catch (error) {
-        print(error);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.error,
-          title: "Error",
-          text: error.toString(),
-        );
+        log(error, LogLevel.error);
       }
     }
   }
@@ -108,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const Padding(padding: EdgeInsets.all(8.0)),
                 CupertinoButton(
-                  child: const Text("Don't have an account?", style: TextStyle(fontSize: 17, fontFamily: "Product Sans"),),
+                  child: const Text("Don't have an account?", style: TextStyle(fontSize: 18, fontFamily: "Product Sans"),),
                   onPressed: () {
                     router.navigateTo(context, "/register", transition: TransitionType.fadeIn);
                   },

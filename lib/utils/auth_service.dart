@@ -26,7 +26,7 @@ class AuthService {
         print("====== =============== ======");
       }
       else if (response.statusCode == 404) {
-        // printged but not user data found!
+        // printed but not user data found!
         print("CadTracker account not found! Signing out...");
         signOut();
       }
@@ -43,7 +43,7 @@ class AuthService {
   }
 
   static Future<void> getAuthToken() async {
-    TRACKER_AUTH_TOKEN = await fb.FirebaseAuth.instance.currentUser!.getIdToken(true);
+    TRACKER_AUTH_TOKEN = (await fb.FirebaseAuth.instance.currentUser!.getIdToken(true))!;
     print("Retrieved auth token: ...${TRACKER_AUTH_TOKEN.substring(TRACKER_AUTH_TOKEN.length - 20)}");
     // await Future.delayed(const Duration(milliseconds: 100));
   }

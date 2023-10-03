@@ -1,5 +1,6 @@
 .env
 serviceAccountKey.json
+lib/utils/firebase_options.dart
 
 # Miscellaneous
 *.class

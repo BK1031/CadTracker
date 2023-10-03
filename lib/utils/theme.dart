@@ -14,15 +14,9 @@ const darkDividerColor = Color(0xFF545454);
 /// Dark style
 final ThemeData theme = ThemeData(
   brightness: Brightness.dark,
-  colorScheme: const ColorScheme.dark().copyWith(
-    primary: MAIN_COLOR,
-    secondary: MAIN_COLOR,
-  ),
   fontFamily: "Product Sans",
-  accentColor: MAIN_COLOR,
   primaryColor: MAIN_COLOR,
   canvasColor: darkCanvasColor,
-  backgroundColor: darkBackgroundColor,
   scaffoldBackgroundColor: darkBackgroundColor,
   cardColor: darkCardColor,
   cardTheme: CardTheme(
@@ -44,4 +38,8 @@ final ThemeData theme = ThemeData(
       borderRadius: BorderRadius.circular(6),
     ),
   ),
+  colorScheme: const ColorScheme.dark().copyWith(
+    primary: MAIN_COLOR,
+    secondary: MAIN_COLOR,
+  ).copyWith(background: darkBackgroundColor),
 );
