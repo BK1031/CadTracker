@@ -4,6 +4,7 @@ import 'package:cad_tracker/pages/home/home_page.dart';
 import 'package:cad_tracker/utils/auth_service.dart';
 import 'package:cad_tracker/utils/config.dart';
 import 'package:cad_tracker/utils/firebase_options.dart';
+import 'package:cad_tracker/utils/logger.dart';
 import 'package:cad_tracker/utils/theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,9 +18,9 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
-  print("BK CadTracker v${appVersion.toString()}");
+  log("BK CadTracker v${appVersion.toString()}");
   FirebaseApp app = await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print("Initialized default app $app");
+  log("Initialized default app $app");
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
