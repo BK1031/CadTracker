@@ -1,4 +1,4 @@
-FROM golang:1.17.7-alpine3.15 as builder
+FROM golang:1.20-alpine3.17 as builder
 
 ENV GOOS=linux
 
@@ -14,12 +14,12 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /cadtracker
+RUN go build -o /lacumbre
 
 ##
 ## Deploy
 ##
-FROM alpine:3.15
+FROM alpine:3.17
 
 WORKDIR /
 
