@@ -25,4 +25,7 @@ WORKDIR /
 
 COPY --from=builder /cadtracker /cadtracker
 
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+ENV TZ=America/Los_Angeles
+
 ENTRYPOINT ["/cadtracker"]
