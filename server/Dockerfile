@@ -14,7 +14,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /lacumbre
+RUN go build -o /cadtracker
 
 ##
 ## Deploy
