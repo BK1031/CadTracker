@@ -88,12 +88,12 @@ func QueueSubscriptionEventForUser(user model.User, event model.Event, start boo
 			}
 			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 				Name:   "Started",
-				Value:  event.Start.Local().Format("January 2 2006 3:4 pm"),
+				Value:  event.Start.Local().Format("January 2, 2006 3:04 pm"),
 				Inline: true,
 			})
 			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 				Name:   "Finished",
-				Value:  event.Stop.Local().Format("January 2 2006 3:4 pm"),
+				Value:  event.Stop.Local().Format("January 2, 2006 3:04 pm"),
 				Inline: true,
 			})
 			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
