@@ -168,7 +168,7 @@ func DiscordStartEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	s.MessageReactionAdd(m.ChannelID, m.ID, "👍")
 	//s.ChannelMessageSend(m.ChannelID, "Starting event...")
-	service.QueueSubscriptionEventForUser(user, event, true)
+	go service.QueueSubscriptionEventForUser(user, event, true)
 	return
 }
 
@@ -213,12 +213,12 @@ func DiscordStopEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 		Name:   "Started",
-		Value:  lastEvent.Start.Local().Format("January 2 2006 3:4 pm"),
+		Value:  lastEvent.Start.Local().Format("January 2, 2006 3:04 pm"),
 		Inline: true,
 	})
 	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 		Name:   "Finished",
-		Value:  lastEvent.Stop.Local().Format("January 2 2006 3:4 pm"),
+		Value:  lastEvent.Stop.Local().Format("January, 2 2006 3:04 pm"),
 		Inline: true,
 	})
 	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
@@ -227,6 +227,6 @@ func DiscordStopEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	})
 	embed.Title = "Summary"
 	_, _ = service.Discord.ChannelMessageSendEmbed(m.ChannelID, &embed)
-	service.QueueSubscriptionEventForUser(user, lastEvent, false)
+	go service.QueueSubscriptionEventForUser(user, lastEvent, false)
 	return
 }
